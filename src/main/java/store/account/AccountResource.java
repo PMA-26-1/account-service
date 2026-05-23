@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import feign.Response;
+
 @RestController
 public class AccountResource implements AccountController {
 
@@ -71,6 +73,20 @@ public class AccountResource implements AccountController {
             ResponseEntity.ok(
                 AccountParser.to(out) // Account -> AccountOut
             );
+    }
+
+    @Override
+    public ResponseEntity<AccountOut> findByEmailAndPassword(AccountIn in) {
+
+        Account a = AccountParser.to(in);
+        Account out = accountService.findByEmailAndPassword(a);
+        
+        return out == null ?
+            ResponseEntity.notFound().build() :
+            ResponseEntity.ok(
+                AccountParser.to(out)
+            );
+
     }
 
 }

@@ -43,6 +43,13 @@ public class AccountService {
         return accountRepository.findById(id).orElse(null).to();
     }
 
+    public Account findByEmailAndPassword(Account account) {
+        String email = account.email();
+        String idString = account.id();
+
+        return accountRepository.findByEmailAndId(email, idString);
+    }
+
     public List<Account> findByAll() {
 
         return StreamSupport.stream(
