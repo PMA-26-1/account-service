@@ -40,14 +40,18 @@ public class AccountService {
     }
 
     public Account findById(String id) {
-        return accountRepository.findById(id).orElse(null).to();
+        return accountRepository.findById(id)
+            .map(AccountModel::to)
+            .orElse(null);
     }
 
     public Account findByEmailAndPassword(Account account) {
         String email = account.email();
-        String idString = account.id();
+        String passwordSha256 = calcHash(account.password());
 
-        return accountRepository.findByEmailAndId(email, idString);
+        return accountRepository.findByEmailAndPasswordSha256(email, passwordSha256)
+            .map(AccountModel::to)
+            .orElse(null);
     }
 
     public List<Account> findByAll() {
