@@ -11,7 +11,7 @@ pipeline {
         // Referencing SERVICE inside NAME avoids duplicating the service name
 
         SERVICE = 'account'
-        NAME = 'marcelovta/${env.SERVICE}'
+        NAME = "marcelovta/${env.SERVICE}"
     }
     
     stages {
@@ -51,13 +51,14 @@ pipeline {
                 )]) {
 
                     // Logs into dockerhub
-                    sh "docker login -u $USERNAME -p $TOKEN"
+                    sh 'echo "$TOKEN" | docker login -u "$USERNAME" --password-stdin'
+
                     
                     // docker buildx
                     // Creates a BuildKit builder that cross-complies images for both `linux/arm64` and `linux/amd64`
                     sh "docker buildx create --use \
                           --platform=linux/arm64,linux/amd64 \
-                          --node mulri-platform-builder-${env.SERVICE} \
+                          --node multi-platform-builder-${env.SERVICE} \
                           --name multi-platform-builder-${env.SERVICE}"
 
                     // Dual tags
