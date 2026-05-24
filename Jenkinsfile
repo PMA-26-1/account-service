@@ -56,7 +56,8 @@ pipeline {
                     
                     // docker buildx
                     // Creates a BuildKit builder that cross-complies images for both `linux/arm64` and `linux/amd64`
-                    sh "docker buildx create --use \
+                    sh "docker buildx rm multi-platform-builder-${env.SERVICE} || true \
+                        docker buildx create --use \
                           --platform=linux/arm64,linux/amd64 \
                           --node multi-platform-builder-${env.SERVICE} \
                           --name multi-platform-builder-${env.SERVICE}"
